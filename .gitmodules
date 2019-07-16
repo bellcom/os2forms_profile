@@ -1,0 +1,6 @@
+[submodule "modules/custom/os2forms_frontend"]
+	path = modules/custom/os2forms_frontend
+	url = git@github.com:OS2Forms/os2forms_frontend.git
+[submodule "modules/custom/os2forms_date_popup"]
+	path = modules/custom/os2forms_date_popup
+	url = git@github.com:OS2Forms/os2forms_date_popup.git

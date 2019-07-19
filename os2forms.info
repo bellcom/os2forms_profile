@@ -27,4 +27,5 @@ dependencies[] = rdf
 
 ; custom modules
 dependencies[] = os2forms_frontend
+dependencies[] = os2forms_settings
 #dependencies[] = os2forms_date_popup

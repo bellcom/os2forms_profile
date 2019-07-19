@@ -283,11 +283,23 @@ function nemid_form_alter(&$form, &$form_state, $form_id) {
 
   switch ($form_id) {
     case 'webform_configure_form':
-      $form['advanced']['nemlogin_link_enable_' . $form['nid']['#value']] = array(
+      $nid = $form['nid']['#value'];
+      $form['advanced']['nemlogin_link_enable_' . $nid] = array(
         '#type' => 'checkbox',
         '#title' => t('Include nemlogin link'),
-        '#default_value' => variable_get('nemlogin_link_enable_' . $form['nid']['#value'], 0),
+        '#default_value' => variable_get('nemlogin_link_enable_' . $nid, 0),
       );
+      $form['advanced']['nemlogin_link_auto_redirect_' . $nid] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Redirect to nemlogin link automatically'),
+        '#default_value' => variable_get('nemlogin_link_auto_redirect_' . $nid, 0),
+        '#states' => array(
+          'invisible' => array(
+            ':input[name="nemlogin_link_enable_' . $nid . '"]' => array('checked' => FALSE),
+          ),
+        ),
+      );
+
       $form['#submit'][] = 'nemid_nemlogin_webform_configure_save';
       break;
 
@@ -322,6 +334,11 @@ function nemid_form_alter(&$form, &$form_state, $form_id) {
                 nemid_populate_fields_recursive($form['submitted'], $serviceplaformen_message);
               }
             }
+          } else {
+            // If user shall be redirected to NemLogin automatically.
+            if (variable_get('nemlogin_link_auto_redirect_' . $nid, 0)) {
+              drupal_goto(nemlogin_get_login_url());
+            }
           }
 
           $form['submitted'][] = array(
@@ -341,6 +358,11 @@ function nemid_form_alter(&$form, &$form_state, $form_id) {
  * Custom submit callback to save nemlogin webform configuration.
  */
 function nemid_nemlogin_webform_configure_save($form, &$form_state) {
-  $login_block_enable = $form_state['values']['nemlogin_link_enable_' . $form['nid']['#value']];
-  variable_set('nemlogin_link_enable_' . $form['nid']['#value'], $login_block_enable);
+  $nid = $form['nid']['#value'];
+
+  $login_link_enable = $form_state['values']['nemlogin_link_enable_' . $nid];
+  variable_set('nemlogin_link_enable_' . $nid, $login_link_enable);
+
+  $login_link_auto_redirect = $form_state['values']['nemlogin_link_auto_redirect_' . $nid];
+  variable_set('nemlogin_link_auto_redirect_' . $nid, $login_link_auto_redirect);
 }

@@ -13,6 +13,7 @@ function _webform_defaults_nemid_pid() {
     'extra' => array(
       'width' => '',
       'maxlength' => '10',
+      'nemid_component_type' => NEMID_WEBFORM_COMPONENT_TYPE_PERSONAL,
     ),
   ), nemid_webform_defaults_component());
 }

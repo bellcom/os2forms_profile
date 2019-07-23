@@ -13,6 +13,7 @@ function _webform_defaults_nemid_com_cvr() {
     'extra' => array(
       'maxlength' => '10',
       'placeholder' => '12345678',
+      'nemid_component_type' => NEMID_WEBFORM_COMPONENT_TYPE_COMPANY,
     ),
   ), nemid_webform_defaults_component());
 }

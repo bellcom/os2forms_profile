@@ -11,7 +11,7 @@
 function _webform_defaults_nemid_coaddress() {
   return array_merge_recursive(array(
     'extra' => array(
-      'get_from_cpr' => '',
+      'nemid_component_type' => NEMID_WEBFORM_COMPONENT_TYPE_PERSONAL,
     ),
   ), nemid_webform_defaults_component());
 }
@@ -20,17 +20,7 @@ function _webform_defaults_nemid_coaddress() {
  * Implements _webform_edit_component().
  */
 function _webform_edit_nemid_coaddress($component) {
-  $form = array();
-  $form['get_from_cpr'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Get from CPR'),
-    '#return_value' => 1,
-    '#description' => t('Get data from CPR and disable if data is available.'),
-    '#weight' => 5,
-    '#default_value' => $component['extra']['get_from_cpr'],
-    '#parents' => array('extra', 'get_from_cpr'),
-  );
-  return $form + nemid_webform_edit_component($component);
+  return nemid_webform_edit_component($component);
 }
 
 /**

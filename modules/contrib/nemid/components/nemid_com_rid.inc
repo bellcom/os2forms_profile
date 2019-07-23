@@ -12,6 +12,7 @@ function _webform_defaults_nemid_com_rid() {
   return array_merge_recursive(array(
     'extra' => array(
       'maxlength' => '10',
+      'nemid_component_type' => NEMID_WEBFORM_COMPONENT_TYPE_COMPANY,
     ),
   ), nemid_webform_defaults_component());
 }

@@ -13,6 +13,7 @@ function _webform_defaults_nemid_cpr() {
     'extra' => array(
       'maxlength' => '10',
       'placeholder' => '070593-1234',
+      'nemid_component_type' => NEMID_WEBFORM_COMPONENT_TYPE_PERSONAL,
     ),
   ), nemid_webform_defaults_component());
 }

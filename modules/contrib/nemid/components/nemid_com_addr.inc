@@ -9,7 +9,11 @@
  * Implements _webform_defaults_component().
  */
 function _webform_defaults_nemid_com_addr() {
-  return nemid_webform_defaults_component();
+  return array_merge_recursive(array(
+    'extra' => array(
+      'nemid_component_type' => NEMID_WEBFORM_COMPONENT_TYPE_COMPANY,
+    ),
+  ), nemid_webform_defaults_component());
 }
 
 /**

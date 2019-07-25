@@ -27,7 +27,7 @@ function os2forms_simplesaml_menu() {
  */
 function os2forms_simplesaml_settings_form($form, &$form_state) {
   $form['os2forms_simplesaml_simplesaml_enable'] = array(
-    '#title' => t('Enabled SimpleSAML redirect'),
+    '#title' => t('Enable SimpleSAML redirect'),
     '#type' => 'checkbox',
     '#default_value' => variable_get('os2forms_simplesaml_simplesaml_enable'),
   );

@@ -1,0 +1,187 @@
+<?php
+
+/**
+ * @file
+ * Code for os2forms_simplesaml_checklist.
+ */
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function os2forms_simplesaml_checklist_form_checklistapi_checklist_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#checklist']->id == 'os2forms_simplesaml_checklist') {
+    $form['checklistapi']['#attached']['js'][] = drupal_get_path('module', 'os2forms_simplesaml_checklist') . '/os2forms_simplesaml_checklist.js';
+  }
+}
+
+/**
+ * Implements hook_checklistapi_checklist_info().
+ */
+function os2forms_simplesaml_checklist_checklistapi_checklist_info() {
+  $modules_page = array('#text' => t('Enable'), '#path' => 'admin/modules');
+  $installation_full_url = $GLOBALS['base_url'] . $GLOBALS['base_path'];
+  $installation_full_https = preg_replace('#^http?://#', 'https://', $installation_full_url);
+
+  $definitions = array();
+  $definitions['os2forms_simplesaml_checklist'] = array(
+    '#title' => t('OS2Forms SimpleSAML checklist'),
+    '#description' => t('Keep track of your Drupal Search Engine Optimization tasks.'),
+    '#path' => 'admin/config/system/os2forms-simplesaml-checklist',
+    '#help' => '</p>' . t("Check off each SimpleSAML related task as you complete it. Don't forget to click the <em>Save</em> button!") . '</p>',
+
+    // Introduction.
+    'introduction' => array(
+      '#title' => t('Introduction'),
+      '#description' => theme('os2forms_simplesaml_checklist_intro_tab'),
+    ),
+
+    // SimpleSAML install and configure.
+    'simplesamlphp' => array(
+      '#title' => t('Install SimpleSAMLphp'),
+      '#description' => '<p>' . t('Steps description how to download, install and configure SimpleSAMLphp installation.') . '</p>',
+      'simplesamlphp_install' => array(
+        '#title' => t('Download and install SimpleSAMLphp.'),
+        '#description' => t('Follow the official guide on how to install SimpleSAML.'),
+        'download' => array(
+          '#text' => t('Download'),
+          '#path' => 'https://simplesamlphp.org/download',
+        ),
+        'install' => array(
+          '#text' => t('Install'),
+          '#path' => 'https://simplesamlphp.org/docs/stable/simplesamlphp-install',
+        ),
+      ),
+      'simplesamlphp_configure_endpoint' => array(
+        '#title' => t('Configure http endpoint for SimpleSAMLphp installation.'),
+        '#description' => t('A normal workflow would be to expose SimpleSAML as @installation/simplesaml.', array(
+          '@installation' => substr($installation_full_url, 0, -1),
+        )),
+        'configure_endpoint_apache' => array(
+          '#text' => t('Configure Apache'),
+          '#path' => 'https://simplesamlphp.org/docs/stable/simplesamlphp-install#section_4',
+        ),
+        'configure_endpoint_nginx' => array(
+          '#text' => t('Configure Nginx'),
+          '#path' => 'https://simplesamlphp.org/docs/stable/simplesamlphp-install#section_5',
+        ),
+      ),
+      'simplesamlphp_https_endpoint' => array(
+        '#title' => t('Provide HTTPS certificate for SimpleSAMLphp installation endpoint.'),
+        '#description' => t('A normal workflow would be to expose SimpleSAML as @installation/simplesaml.', array(
+          '@installation' => substr($installation_full_https, 0, -1),
+        )),
+      ),
+      'simplesamlphp_configure' => array(
+        '#title' => t('Configure SimpleSAMLphp installation.'),
+        '#description' => t('Normally SimpleSAMLphp is to be used as SP (service provider).'),
+        'configure_simplesamlphp' => array(
+          '#text' => t('Configure SimpleSAMLphp'),
+          '#path' => 'https://simplesamlphp.org/docs/stable/simplesamlphp-install#section_6',
+        ),
+        'configure_simplesamlphp_sp' => array(
+          '#text' => t('SimpleSAMLphp Service Provider QuickStart'),
+          '#path' => 'https://simplesamlphp.org/docs/stable/simplesamlphp-sp',
+        ),
+      ),
+      'simplesamlphp_test' => array(
+        '#title' => t('Test a successful login via SimpleSAMLphp.'),
+        '#description' => t('You should be able to login on @installation/simplesaml by selecting the configured authentication source.', array(
+          '@installation' => substr($installation_full_https, 0, -1),
+        )),
+      ),
+    ),
+
+    // Configure simplesamlphp_auth module.
+    'simplesamlphp_auth' => array(
+      '#title' => t('Install simplesamlphp_auth module'),
+      '#description' => '<p>' . t('Download, install and configure simplesamlphp_auth Drupal module.') . '</p>',
+      'simplesamlphp_auth_module_install' => array(
+        '#title' => t('Install simplesamlphp_auth (auto).'),
+        '#description' => t('Download and install simplesamlphp_auth Drupal module.'),
+        '#default_value' => module_exists('simplesamlphp_auth'),
+        'project_page' => array(
+          '#text' => t('Download'),
+          '#path' => 'https://www.drupal.org/project/simplesamlphp_auth',
+        ),
+        'modules_page' => $modules_page,
+      ),
+      'simplesamlphp_auth_module_configure' => array(
+        '#title' => t('Configure simplesamlphp_auth.'),
+        '#description' => t('Configure simplesamlphp_auth Drupal module.'),
+        'project_page' => array(
+          '#text' => t('Configure'),
+          '#path' => 'admin/config/people/simplesamlphp_auth',
+        ),
+      ),
+      'simplesamlphp_auth_activate' => array(
+        '#title' => t('Activate authentication via SimpleSAMLphp (auto).'),
+        '#description' => t('Doing that before configuring the module could lock you out of Drupal..'),
+        '#default_value' => variable_del('simplesamlphp_auth_activate'),
+        'project_page' => array(
+          '#text' => t('Configure'),
+          '#path' => 'admin/config/people/simplesamlphp_auth',
+        ),
+      ),
+    ),
+
+    // Enable installation HTTPS certificate.
+    'installation_https' => array(
+      '#title' => t('HTTPS certificate (production website)'),
+      '#description' => '<p>' . t('In order for SimpleSAMLphp to work securely, website must be using HTTPS certificate.') . '</p>',
+      'installation_https_enable' => array(
+        '#title' => t('Enable HTTPS certificate (auto).'),
+        '#description' => t('Configure your host to use HTTPS certificate.'),
+        '#default_value' => drupal_is_https(),
+      ),
+      'installation_https_force_https_login_links' => array(
+        '#title' => t('Force HTTPS for login links (auto).'),
+        '#description' => t('HTTPS should be forces on login links.'),
+        '#default_value' => variable_get('simplesamlphp_auth_forcehttps'),
+        'project_page' => array(
+          '#text' => t('Configure'),
+          '#path' => 'admin/config/people/simplesamlphp_auth',
+        ),
+      ),
+    ),
+
+    // Configure os2forms_simplesaml module.
+    'os2forms_simplesaml' => array(
+      '#title' => t('Install os2forms_simplesaml module'),
+      '#description' => '<p>' . t('Install and configure os2forms_simplesaml Drupal module.') . '</p>',
+      'os2forms_simplesaml_install' => array(
+        '#title' => t('Install os2forms_simplesaml (auto).'),
+        '#description' => t('Install os2forms_simplesaml Drupal module.'),
+        '#default_value' => module_exists('os2forms_simplesaml'),
+        'modules_page' => $modules_page,
+      ),
+      'os2forms_simplesaml_ips' => array(
+        '#title' => t("Provide IP's list to redirect SimpleSAML login (optional)."),
+        'project_page' => array(
+          '#text' => t('Configure'),
+          '#path' => 'admin/config/system/os2forms_simplesaml',
+        ),
+      ),
+      'os2forms_simplesaml_activate' => array(
+        '#title' => t('Activate os2forms_simplesaml (auto).'),
+        '#description' => t('Doing that before configuring simplesamlphp_auth module could lock you out of Drupal.'),
+        '#default_value' => variable_del('os2forms_simplesaml_simplesaml_enable'),
+        'project_page' => array(
+          '#text' => t('Activate'),
+          '#path' => 'admin/config/system/os2forms_simplesaml',
+        ),
+      ),
+    ),
+  );
+  return $definitions;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function os2forms_simplesaml_checklist_theme($existing, $type, $theme, $path) {
+  return array(
+    'os2forms_simplesaml_checklist_intro_tab' => array(
+      'template' => 'os2forms_simplesaml_checklist_intro_tab',
+    ),
+  );
+}

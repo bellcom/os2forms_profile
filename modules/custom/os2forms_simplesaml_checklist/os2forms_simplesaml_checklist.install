@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Uninstall function for os2forms_simplesaml_checklist module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function os2forms_simplesaml_checklist_uninstall() {
+  variable_del('checklistapi_checklist_os2forms_simplesaml_checklist');
+}

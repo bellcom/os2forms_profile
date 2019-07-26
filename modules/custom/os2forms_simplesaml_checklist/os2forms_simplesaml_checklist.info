@@ -1,0 +1,6 @@
+name = OS2Forms simpleSAML Checklist
+description = SimplesSAML checklist for Drupal.
+core = 7.x
+dependencies[] = checklistapi
+package = OS2Forms
+configure = admin/config/system/os2forms-simplesaml-checklist

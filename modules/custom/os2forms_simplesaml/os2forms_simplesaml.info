@@ -3,3 +3,4 @@ description = Maps SimpleSAMLphp attributes and controls login
 core = 7.x
 package = OS2Forms
 dependencies[] = simplesamlphp_auth
+configure = admin/config/system/os2forms_simplesaml

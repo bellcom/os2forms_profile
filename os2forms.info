@@ -25,7 +25,9 @@ dependencies[] = field_ui
 dependencies[] = file
 dependencies[] = rdf
 
+; contrib modules
+dependencies[] = transliteration
+
 ; custom modules
 dependencies[] = os2forms_frontend
 dependencies[] = os2forms_settings
-#dependencies[] = os2forms_date_popup

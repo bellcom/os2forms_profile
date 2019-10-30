@@ -1,9 +1,9 @@
 // |--------------------------------------------------------------------------
-// | Panel
+// | Flere filer.
 // |--------------------------------------------------------------------------
 // |
 // | This file contains styles for the following:
-// | - .panel
+// | - .webform-component--flere_filer
 // |
 
 // --------------------------------------------------
@@ -14,38 +14,45 @@
 // Mixins
 // --------------------------------------------------
 
-@mixin panels-mixin() {}
+@mixin webform-component-flere-filer-mixin() {}
 
 // --------------------------------------------------
 // Styling
 // --------------------------------------------------
 
-.panel {}
-.panel-title {
-  display: block;
+.webform-component--flere_filer {
 
-  font-weight: $font-weight-bold;
+  &.panel {
+    padding: 10px 20px;
+    margin-bottom: $form-group-margin-bottom;
 
-  &, &:hover, &:focus {
-    text-decoration: none;
-  }
+    border: 1px solid #888 !important;
+    border-radius: $border-radius-base;
 
-  &[data-toggle="collapse"] {
-
-    &:before {
-      display: inline-block;
-
-      margin-right: 10px;
-
-      font-family: FontAwesome;
-      font-size: $font-size-large;
-      content: $fa-var-plus-circle;
+    .panel-heading {
+      margin-bottom: 0;
     }
 
-    &[aria-expanded="true"] {
+    .panel-title {
+      margin-right: -21px;
+      margin-left: -21px;
 
-      &:before {
-        content: $fa-var-minus-circle;
+      padding: 10px 21px;
+
+      border: 1px solid #888;
+      border-radius: 0;
+      border-top-left-radius: $border-radius-base;
+      border-top-right-radius: $border-radius-base;
+
+      font-size: $font-size-large;
+      background-color: white;
+    }
+
+    .panel-body {
+      padding-top: 10px;
+
+      .form-group {
+        margin-bottom: 0;
       }
     }
   }
@@ -54,43 +61,6 @@
 // --------------------------------------------------
 // Variants
 // --------------------------------------------------
-
-.panel,
-.panel-default {
-
-  .panel-heading {
-    padding: 0;
-    border: 0;
-
-    background-color: transparent;
-  }
-
-  .panel-title {
-    padding: $panel-heading-padding;
-
-    font-size: $font-size-base;
-    border-radius: $border-radius-base;
-
-    background-color: $panel-default-heading-bg;
-
-    &, &:hover, &:focus {
-      color: $text-color;
-    }
-
-    &:before {
-      color: $text-color;
-    }
-
-    &[aria-expanded="true"] {
-      color: white;
-      background-color: $brand-tertiary;
-
-      &:before {
-        color: white;
-      }
-    }
-  }
-}
 
 // --------------------------------------------------
 // Responsive

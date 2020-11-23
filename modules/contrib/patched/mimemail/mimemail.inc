@@ -197,7 +197,18 @@ function _mimemail_file($url = NULL, $content = NULL, $name = '', $type = '', $d
     if ($is_file) {
       $access = user_access('send arbitrary files');
       $in_public_path = strpos(@drupal_realpath($file), drupal_realpath('public://')) === 0;
-      if (!$in_public_path && !$access) {
+
+      // Additional files.
+      $additional_paths = variable_get('mimemail_additional_paths', '');
+      $array_paths = array_map('drupal_strtolower', array_filter(explode(',', preg_replace('#\s+#', '', $additional_paths))));
+      $in_additional_path = FALSE;
+      foreach ($array_paths as $additional_path) {
+        if (strpos(drupal_realpath($file), drupal_realpath($additional_path)) === 0) {
+          $in_additional_path = TRUE;
+        }
+      }
+
+      if (!$in_public_path && !$in_additional_path && !$access) {
         return $url;
       }
     }

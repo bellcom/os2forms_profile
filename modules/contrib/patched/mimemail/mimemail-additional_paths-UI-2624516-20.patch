@@ -1,0 +1,57 @@
+diff --git a/includes/mimemail.admin.inc b/includes/mimemail.admin.inc
+index 7155e79..26331bc 100644
+--- a/includes/mimemail.admin.inc
++++ b/includes/mimemail.admin.inc
+@@ -71,7 +71,13 @@ function mimemail_admin_settings() {
+       '#description' => t('This option disables the removing of class attributes from the message source. Useful for debugging the style of the message.'),
+     );
+   }
+-
++  $form['mimemail']['mimemail_additional_paths'] = array(
++    '#type'          => 'textarea',
++    '#title'         => t('Additional file paths'),
++    '#default_value' => variable_get('mimemail_additional_paths', ''),
++    '#description'   => t("Add the path here to attach images or files located in the site's theme, module or private files directories.<br />
++	                      Example: 'sites/all/themes,sites/all/modules' or 'private://' or '../private-files'. Note that you can split your definitions using any number of lines."),
++  );
+   // Get a list of all formats.
+   $formats = filter_formats();
+   foreach ($formats as $format) {
+diff --git a/mimemail.inc b/mimemail.inc
+index dd7847f..4e864d5 100644
+--- a/mimemail.inc
++++ b/mimemail.inc
+@@ -197,7 +197,18 @@ function _mimemail_file($url = NULL, $content = NULL, $name = '', $type = '', $d
+     if ($is_file) {
+       $access = user_access('send arbitrary files');
+       $in_public_path = strpos(@drupal_realpath($file), drupal_realpath('public://')) === 0;
+-      if (!$in_public_path && !$access) {
++
++      // Additional files.
++      $additional_paths = variable_get('mimemail_additional_paths', '');
++      $array_paths = array_map('drupal_strtolower', array_filter(explode(',', preg_replace('#\s+#', '', $additional_paths))));
++      $in_additional_path = FALSE;
++      foreach ($array_paths as $additional_path) {
++        if (strpos(drupal_realpath($file), drupal_realpath($additional_path)) === 0) {
++          $in_additional_path = TRUE;
++        }
++      }
++
++      if (!$in_public_path && !$in_additional_path && !$access) {
+         return $url;
+       }
+     }
+diff --git a/mimemail.install b/mimemail.install
+index a09034c..4950064 100644
+--- a/mimemail.install
++++ b/mimemail.install
+@@ -45,7 +45,8 @@ function mimemail_uninstall() {
+     'mimemail_format',
+     'mimemail_simple_address',
+     'mimemail_linkonly',
+-    'mimemail_preserve_class'
++    'mimemail_preserve_class',
++    'mimemail_additional_paths',
+   );
+   foreach ($variables as $variable) {
+     variable_del($variable);

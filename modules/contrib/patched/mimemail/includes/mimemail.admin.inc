@@ -71,7 +71,13 @@ function mimemail_admin_settings() {
       '#description' => t('This option disables the removing of class attributes from the message source. Useful for debugging the style of the message.'),
     );
   }
-
+  $form['mimemail']['mimemail_additional_paths'] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Additional file paths'),
+    '#default_value' => variable_get('mimemail_additional_paths', ''),
+    '#description'   => t("Add the path here to attach images or files located in the site's theme, module or private files directories.<br />
+	                      Example: 'sites/all/themes,sites/all/modules' or 'private://' or '../private-files'. Note that you can split your definitions using any number of lines."),
+  );
   // Get a list of all formats.
   $formats = filter_formats();
   foreach ($formats as $format) {
